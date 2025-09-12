@@ -45,6 +45,11 @@
       .v-select .dropdown-toggle {
         height: calc(2.25rem + 2px);
       }
+      legend {
+        font-weight: 500 !important;
+        font-size: 1.2rem !important;
+        color: #311B92 !important;
+      }
     </style>
   </head>
   <body>
@@ -57,8 +62,8 @@
         >
           <!-- Wrapper to center all contents and restrict max width -->
           <div class="text-center w-100 mx-auto" style="max-width: 420px">
-            <h1>{{ title }}</h1>
-            <h4 class="mb-4">{{ subtitle }}</h4>
+            <h1 style="font-weight: 500!important; color: #311B92;">{{ title }}</h1>
+            <h4 class="mb-4" style="color: #E65100;">{{ subtitle }}</h4>
 
             <!-- Responsive image with shadow -->
             <b-row>
@@ -77,9 +82,9 @@
                   variant="primary"
                   class="custom-shadow w-100"
                   @click="register = true"
-                  style="max-width: 400px; height: 40px; border-radius: 10px"
+                  style="max-width: 400px; height: 40px; border-radius: 10px; font-weight: 500!important; font-size: 1.2rem!important;"
                 >
-                  ลงทะเบียน
+                  <i class="fas fa-heart"></i> สนใจเข้าร่วม
                 </b-button>
               </b-col>
             </b-row>
@@ -101,7 +106,7 @@
               @click="register = false"
               style="cursor: pointer"
             >
-              <h1 style="font-weight: bold; position: relative; bottom: -10px">
+              <h1 style="font-weight: 500!important; color: #311B92; position: relative; bottom: -5px;">
                 {{ registerTitle }}
               </h1>
               <span class="text-muted">รายละเอียด</span>
@@ -171,7 +176,7 @@
                 <!-- Submit button -->
                 <b-button
                   class="custom-shadow text-center w-100"
-                  style="max-width: 400px; height: 40px; border-radius: 10px"
+                  style="max-width: 400px; height: 40px; border-radius: 10px; font-weight: 500!important; font-size: 1.2rem!important;"
                   variant="primary"
                   @click="btnSubmit"
                 >
