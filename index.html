@@ -70,14 +70,14 @@
           class="d-flex flex-column justify-content-center align-items-center min-vh-100 text-center"
         >
           <h1>{{ title }}</h1>
-          <h4 class="mb-4">{{ subtitle }}</h4>
+          <h4 class="mb-2">{{ subtitle }}</h4>
           <b-img
             src="pic-1.jpg"
             fluid
-            class="d-block mx-auto mb-4"
-            style="max-width: 300px"
+            class="custom-shadow d-block mx-auto mb-2"
+            style="width: auto; max-width: 400px;"
           ></b-img>
-          <b-button variant="primary" @click="register=true"
+          <b-button variant="primary" class="custom-shadow" @click="register=true" style="width: 100%; max-width: 400px; height: 40px; border-radius: 10px;"
             >ลงทะเบียน</b-button
           >
         </b-container>
@@ -85,58 +85,66 @@
 
       <template v-else>
         <b-container
-          class="d-flex justify-content-center align-items-center min-vh-100"
+          fluid
+          class="d-flex justify-content-center align-items-center min-vh-100 pd-0"
         >
-          <b-row style="max-width: 300px">
-            <b-col cols="12" class="text-center mb-4">
-              <h4>Register</h4>
+          <b-row class="register-input">
+            <b-col cols="12" class="text-center mb-0" @click="register=false" style="cursor: pointer;">
+              <h1 style="font-weight: bold; position: relative; bottom: -10px;">{{ registerTitle }}</h1>
+              <span class="text-muted">รายละเอียด</span>
             </b-col>
             <b-col cols="12" class="text-center mb-4">
               <div class="register-form">
-                <b-form-group label="เบอร์โทรศัพท์:" label-class="text-left">
+                <b-form-group label="เบอร์โทรศัพท์" label-class="text-left">
                   <b-form-input
                     v-model="form.number_id"
                     type="text"
-                    placeholder="กรุณากรอกเบอร์โทรศัพท์"
+                    maxlength="10"
+                    @input="form.number_id = form.number_id.replace(/\D/g, '').slice(0, 10)"
+                    placeholder="เบอร์โทรศัพท์ (เช่น 0812345678)"
+                    autofocus
                     required
                   ></b-form-input>
                 </b-form-group>
-                <b-form-group label="ชื่อ:" label-class="text-left">
-                  <b-form-input
-                    v-model="form.first_name"
-                    type="text"
-                    placeholder="กรุณากรอกชื่อ"
-                    required
-                  ></b-form-input>
-                </b-form-group>
-                <b-form-group label="นามสกุล:" label-class="text-left">
-                  <b-form-input
-                    v-model="form.last_name"
-                    type="text"
-                    placeholder="กรุณากรอกนามสกุล"
-                    required
-                  ></b-form-input>
-                </b-form-group>
-                <b-form-group label="Class:" label-class="text-left">
-                  <b-form-input
-                    v-model="form.class"
-                    type="text"
-                    placeholder="Class"
-                    required
-                  ></b-form-input>
-                </b-form-group>
-                <b-form-group label="จังหวัด:" label-class="text-left">
+                <b-form-group label="จังหวัด" label-class="text-left">
                   <v-select
                     v-model="form.province"
                     :options="provinceOptions"
                     placeholder="เลือกจังหวัด"
                   ></v-select>
                 </b-form-group>
+                <b-form-group label="ชื่อ" label-class="text-left">
+                  <b-form-input
+                    v-model="form.first_name"
+                    type="text"
+                    placeholder="ชื่อ"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+                <b-form-group label="นามสกุล" label-class="text-left">
+                  <b-form-input
+                    v-model="form.last_name"
+                    type="text"
+                    placeholder="นามสกุล"
+                    required
+                  ></b-form-input>
+                </b-form-group>
+                <b-form-group class="mb-2" label="เข้าร่วมการอบรม" label-class="text-left">
+                  <b-form-input
+                    v-model="form.class"
+                    type="text"
+                    class="bg-white"
+                    placeholder="ชั้นเรียน"
+                    required
+                    readonly
+                  ></b-form-input>
+                </b-form-group>
                 <b-button
-                  class="text-center"
+                  class="custom-shadow text-center"
+                  style="width: 100%; max-width: 400px; height: 40px; border-radius: 10px;"
                   variant="primary"
                   @click="btnSubmit"
-                  >ส่งข้อมูล</b-button
+                  ><i class="fas fa-paper-plane"></i> ลงทะเบียน</b-button
                 >
               </div>
             </b-col>
@@ -190,15 +198,17 @@
       components: {},
       data() {
         return {
-          title: "ลงทะเบียน",
-          subtitle: "ระบบลงทะเบียนออนไลน์",
+          title: "เข้าร่วมการอบรม",
+          subtitle: "โดย BENJI MORF",
+          registerTitle: "ลงทะเบียน",
           code: new URLSearchParams(window.location.search).get("code") ?? null,
           register: false,
+          showLineQR: false,
           form: {
             number_id: null,
             first_name: null,
             last_name: null,
-            class: null,
+            class: "29 กันยายน 2025",
             province: null,
           },
           provinceOptions: [
@@ -304,11 +314,25 @@
             console.log("Response:", response.data);
 
             if (response.data.message === "Success") {
-              alert("เพิ่มข้อมูลเรียบร้อย");
+              this.$bvToast.toast("ระบบได้รับข้อมูลของท่านเรียบร้อยแล้ว", {
+                title: 'ลงทะเบียนสำเร็จ',
+                variant: 'primary',
+                toaster: 'b-toaster-top-center',
+                solid: true,
+              });
+
+              this.showLineQR = true;
             } else if (response.data.message === "Update") {
-              alert("อัปเดตข้อมูลเรียบร้อย");
+              this.$bvToast.toast("เบอร์โทรของท่านได้ลงทะเบียนไปแล้ว ข้อมูลใหม่จะถูกปรับปรุง", {
+                title: 'แจ้งเตือน',
+                variant: 'warning',
+                toaster: 'b-toaster-top-center',
+                solid: true,
+              });
+
+              this.showLineQR = true;
             } else {
-              alert("ส่งข้อมูลสำเร็จ");
+              alert("errror");
             }
 
             this.register = false;
@@ -316,7 +340,6 @@
               number_id: null,
               first_name: null,
               last_name: null,
-              class: null,
               province: null,
             };
           } catch (error) {
