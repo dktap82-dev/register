@@ -148,7 +148,7 @@
                 </b-form-group>
 
                 <!-- Last name -->
-                <b-form-group label="นามสกุล" label-class="text-left">
+                <b-form-group label="นามสกุล" class="mb-2" label-class="text-left">
                   <b-form-input
                     v-model="form.last_name"
                     type="text"
@@ -159,6 +159,7 @@
 
                 <!-- Class (read-only) -->
                 <b-form-group
+                  v-if=false
                   class="mb-2"
                   label="เข้าร่วมการอบรม"
                   label-class="text-left"
@@ -206,7 +207,7 @@
           // Page titles
           title: "เข้าร่วมการอบรม",
           subtitle: "โดย BENJI MORF",
-          registerTitle: "ลงทะเบียน",
+          registerTitle: "อบรมการสร้างสาวก",
 
           // State variables
           register: false,
