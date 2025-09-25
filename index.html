@@ -48,23 +48,105 @@
       legend {
         font-weight: 500 !important;
         font-size: 1.2rem !important;
-        color: #311B92 !important;
+        color: #311b92 !important;
       }
     </style>
   </head>
   <body>
     <div id="app">
       <!-- Landing page before registration -->
+      <!-- TEST: {{ isCookied }} {{ keyUpdate}} -->
       <template v-if="!register">
         <b-container
           fluid
           class="d-flex flex-column justify-content-center align-items-center min-vh-100"
+          :key="keyUpdate"
         >
           <!-- Wrapper to center all contents and restrict max width -->
           <div class="text-center w-100 mx-auto" style="max-width: 420px">
-            <h1 style="font-weight: 500!important; color: #311B92;">{{ title }}</h1>
-            <h4 class="mb-4" style="color: #E65100;">{{ subtitle }}</h4>
+            <h1 style="font-weight: 500 !important; color: #311b92">
+              {{ title }}
+            </h1>
+            <h4 class="mb-4" style="color: #e65100">{{ subtitle }}</h4>
 
+            <b-row v-if="isCookied===true" class="mb-2">
+              <b-col>
+                <div class="zoom-actions d-flex align-items-center">
+                  <b-button
+                    variant="primary"
+                    class="mr-2"
+                    @click="openZoomDeep"
+                    style="border-radius: 10px; min-width: 140px"
+                  >
+                    <i class="fas fa-video mr-2"></i> เข้าห้อง ZOOM
+                  </b-button>
+
+                  <b-button
+                    variant="outline-secondary"
+                    class="mr-2"
+                    @click="copyZoom"
+                    style="border-radius: 10px"
+                  >
+                    <i class="fas fa-copy mr-1"></i> คัดลอกลิงก์
+                  </b-button>
+
+                  <b-button
+                    variant="outline-info"
+                    @click="$bvModal.show('zoom-qr-modal')"
+                    style="border-radius: 10px"
+                  >
+                    <i class="fas fa-qrcode mr-1"></i> แสดง QR
+                  </b-button>
+                </div>
+
+                <!-- Modal แสดง QR -->
+                <b-modal
+                  id="zoom-qr-modal"
+                  title="สแกนเพื่อเข้าห้อง Zoom"
+                  hide-footer
+                >
+                  <div class="text-center">
+                    <img
+                      :src="zoomQrUrl"
+                      alt="Zoom QR"
+                      style="max-width: 260px; width: 100%; height: auto"
+                    />
+                    <p class="mt-3 mb-0 small text-muted">
+                      สแกน QR เพื่อเปิดลิงก์ Zoom
+                    </p>
+                    <p class="small text-muted">
+                      ลิงก์:
+                      <a :href="zoomWebLink" target="_blank" rel="noopener"
+                        >{{ shortLink }}</a
+                      >
+                    </p>
+                  </div>
+                </b-modal>
+              </b-col>
+            </b-row>
+
+            <b-row v-if="isCookied===true">
+              <b-col cols="12" class="mb-2">
+                <a
+                  class="mb-4"
+                  href="https://line.me/ti/p/%40everyoneth"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <button
+                    style="
+                      padding: 10px 16px;
+                      border-radius: 8px;
+                      background: #00c300;
+                      color: white;
+                      border: none;
+                    "
+                  >
+                    <i class="fab fa-line"></i> เพิ่มเพื่อน @everyoneth
+                  </button>
+                </a>
+              </b-col>
+            </b-row>
             <!-- Responsive image with shadow -->
             <b-row>
               <b-col cols="12" class="mb-2">
@@ -82,7 +164,13 @@
                   variant="primary"
                   class="custom-shadow w-100"
                   @click="register = true"
-                  style="max-width: 400px; height: 40px; border-radius: 10px; font-weight: 500!important; font-size: 1.2rem!important;"
+                  style="
+                    max-width: 400px;
+                    height: 40px;
+                    border-radius: 10px;
+                    font-weight: 500 !important;
+                    font-size: 1.2rem !important;
+                  "
                 >
                   <i class="fas fa-heart"></i> สนใจเข้าร่วม
                 </b-button>
@@ -106,8 +194,15 @@
               @click="register = false"
               style="cursor: pointer"
             >
-              <h3 style="font-weight: 500!important; color: #311B92; position: relative; bottom: -5px;">
-                ลงทะเบียน<br/>
+              <h3
+                style="
+                  font-weight: 500 !important;
+                  color: #311b92;
+                  position: relative;
+                  bottom: -5px;
+                "
+              >
+                ลงทะเบียน<br />
                 {{ registerTitle }}
               </h3>
               <span class="text-muted">รายละเอียด</span>
@@ -149,7 +244,11 @@
                 </b-form-group>
 
                 <!-- Last name -->
-                <b-form-group label="นามสกุล" class="mb-2" label-class="text-left">
+                <b-form-group
+                  label="นามสกุล"
+                  class="mb-2"
+                  label-class="text-left"
+                >
                   <b-form-input
                     v-model="form.last_name"
                     type="text"
@@ -160,7 +259,7 @@
 
                 <!-- Class (read-only) -->
                 <b-form-group
-                  v-if=false
+                  v-if="false"
                   class="mb-2"
                   label="เข้าร่วมการอบรม"
                   label-class="text-left"
@@ -178,7 +277,13 @@
                 <!-- Submit button -->
                 <b-button
                   class="custom-shadow text-center w-100"
-                  style="max-width: 400px; height: 40px; border-radius: 10px; font-weight: 500!important; font-size: 1.2rem!important;"
+                  style="
+                    max-width: 400px;
+                    height: 40px;
+                    border-radius: 10px;
+                    font-weight: 500 !important;
+                    font-size: 1.2rem !important;
+                  "
                   variant="primary"
                   @click="btnSubmit"
                 >
@@ -205,6 +310,7 @@
       el: "#app",
       data() {
         return {
+          keyUpdate: 0,
           // Page titles
           title: "เข้าร่วมการอบรม",
           subtitle: "โดย BENJI MORF",
@@ -212,7 +318,15 @@
 
           // State variables
           register: false,
+          isCookied: false,
           showLineQR: false,
+
+          // zoom
+          zoomWebLink:
+            "https://us02web.zoom.us/j/81915886102?pwd=FYsUwP962bHB3Ihks6sBTfV1zC3tPa.1",
+          meetingNumber: "81915886102",
+          meetingPwd: "FYsUwP962bHB3Ihks6sBTfV1zC3tPa.1",
+          deepOpenTimeoutMs: 800,
 
           // Registration form
           form: {
@@ -223,7 +337,7 @@
             province: null,
           },
 
-          // Province options
+          // Province options (ตัดมาเหมือนเดิม)...
           provinceOptions: [
             "กรุงเทพมหานคร",
             "กระบี่",
@@ -305,7 +419,61 @@
           ],
         };
       },
+      computed: {
+        // deep link รูปแบบ zoommtg
+        zoomDeepLink() {
+          return `zoommtg://zoom.us/join?confno=${encodeURIComponent(
+            this.meetingNumber
+          )}&pwd=${encodeURIComponent(this.meetingPwd)}`;
+        },
+        // QR รูปแบบจาก API (ใช้ลิงก์เว็บเป็นค่า data)
+        zoomQrUrl() {
+          return (
+            "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" +
+            encodeURIComponent(this.zoomWebLink)
+          );
+        },
+        shortLink() {
+          try {
+            const u = new URL(this.zoomWebLink);
+            return u.origin + u.pathname;
+          } catch (e) {
+            return this.zoomWebLink;
+          }
+        },
+      },
       methods: {
+        // Cookie helpers (store string "1")
+        setCookie(name, value, days) {
+          let expires = "";
+          if (days) {
+            const date = new Date();
+            date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+            expires = "; expires=" + date.toUTCString();
+          }
+          // SameSite=Lax เพื่อให้ทำงานข้ามหน้าได้อย่างปลอดภัยบน localhost
+          document.cookie =
+            name +
+            "=" +
+            encodeURIComponent(value || "") +
+            expires +
+            "; path=/; SameSite=Lax";
+        },
+        getCookie(name) {
+          const nameEQ = name + "=";
+          const ca = document.cookie.split(";");
+          for (let i = 0; i < ca.length; i++) {
+            let c = ca[i].trim();
+            if (c.indexOf(nameEQ) === 0)
+              return decodeURIComponent(c.substring(nameEQ.length));
+          }
+          return null;
+        },
+        eraseCookie(name) {
+          document.cookie =
+            name + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+        },
+
         // Handle form submission
         async btnSubmit() {
           if (
@@ -327,26 +495,32 @@
 
             console.log("Response:", response.data);
 
-            // Show success / update / error message
-            if (response.data.message === "Success") {
-              this.$bvToast.toast("ระบบได้รับข้อมูลของท่านเรียบร้อยแล้ว", {
-                title: "ลงทะเบียนสำเร็จ",
-                variant: "primary",
+            // ถ้าสำเร็จหรือ update ให้เซ็ต cookie และสถานะ
+            if (
+              response.data.message === "Success" ||
+              response.data.message === "Update"
+            ) {
+              const toastMsg =
+                response.data.message === "Success"
+                  ? "ระบบได้รับข้อมูลของท่านเรียบร้อยแล้ว"
+                  : "เบอร์โทรของท่านได้ลงทะเบียนไปแล้ว ข้อมูลใหม่จะถูกปรับปรุง";
+
+              this.$bvToast.toast(toastMsg, {
+                title:
+                  response.data.message === "Success"
+                    ? "ลงทะเบียนสำเร็จ"
+                    : "แจ้งเตือน",
+                variant:
+                  response.data.message === "Success" ? "primary" : "warning",
                 toaster: "b-toaster-top-center",
                 solid: true,
               });
 
-              this.showLineQR = true;
-            } else if (response.data.message === "Update") {
-              this.$bvToast.toast(
-                "เบอร์โทรของท่านได้ลงทะเบียนไปแล้ว ข้อมูลใหม่จะถูกปรับปรุง",
-                {
-                  title: "แจ้งเตือน",
-                  variant: "warning",
-                  toaster: "b-toaster-top-center",
-                  solid: true,
-                }
-              );
+              // set cookie เป็น string "1"
+              this.setCookie("isRegistered", "1", 30);
+              // แปลงเป็น boolean เพื่อใช้ใน template
+              this.isCookied = this.getCookie("isRegistered") === "1";
+              this.keyUpdate++;
 
               this.showLineQR = true;
             } else {
@@ -360,16 +534,86 @@
               first_name: null,
               last_name: null,
               province: null,
+              class: "29 กันยายน 2025",
             };
           } catch (error) {
             console.error("API Error:", error);
             alert("เกิดข้อผิดพลาดในการส่งข้อมูล");
           }
         },
+
+        openZoomDeep() {
+          const deep = this.zoomDeepLink;
+          const web = this.zoomWebLink;
+
+          try {
+            const ifr = document.createElement("iframe");
+            ifr.style.display = "none";
+            ifr.src = deep;
+            document.body.appendChild(ifr);
+
+            setTimeout(() => {
+              try {
+                document.body.removeChild(ifr);
+              } catch (e) {
+                /*ignore*/
+              }
+              window.open(web, "_blank", "noopener");
+            }, this.deepOpenTimeoutMs);
+          } catch (e) {
+            window.open(web, "_blank", "noopener");
+          }
+
+          if (this.$bvToast) {
+            this.$bvToast.toast(
+              "กำลังเปิด Zoom (พยายามเปิดแอป หากไม่สำเร็จจะเปิดหน้าเว็บ)",
+              {
+                title: "เปิด Zoom",
+                variant: "info",
+                toaster: "b-toaster-top-center",
+                solid: true,
+              }
+            );
+          }
+        },
+
+        // คัดลอกลิงก์เว็บ (เหมือนก่อน)
+        async copyZoom() {
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              await navigator.clipboard.writeText(this.zoomWebLink);
+            } else {
+              const ta = document.createElement("textarea");
+              ta.value = this.zoomWebLink;
+              ta.setAttribute("readonly", "");
+              ta.style.position = "absolute";
+              ta.style.left = "-9999px";
+              document.body.appendChild(ta);
+              ta.select();
+              document.execCommand("copy");
+              document.body.removeChild(ta);
+            }
+
+            if (this.$bvToast) {
+              this.$bvToast.toast("คัดลอกลิงก์ Zoom แล้ว", {
+                title: "คัดลอกแล้ว",
+                variant: "success",
+                toaster: "b-toaster-top-center",
+                solid: true,
+              });
+            }
+          } catch (err) {
+            console.error(err);
+            alert("คัดลอกลิงก์ไม่สำเร็จ");
+          }
+        },
       },
       created() {
         // Set document title dynamically
         document.title = this.title;
+
+        // อ่านค่า cookie ตอนโหลด (บน localhost cookie จะทำงาน)
+        this.isCookied = this.getCookie("isRegistered") === "1";
       },
     });
   </script>
