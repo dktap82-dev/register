@@ -64,11 +64,17 @@
         >
           <!-- Wrapper to center all contents and restrict max width -->
           <div class="text-center w-100 mx-auto" style="max-width: 420px">
+            <template v-if="!isCookied">
             <h1 style="font-weight: 500 !important; color: #311b92">
               {{ title }}
             </h1>
             <h4 class="mb-4" style="color: #e65100">{{ subtitle }}</h4>
-
+            </template>
+            <template v-else>
+            <h1 style="font-weight: 500 !important; color: #311b92">
+              ลงทะเบียนเรียบร้อย
+            </h1>
+            </template>
             <b-row v-if="isCookied===true" class="mb-2">
               <b-col>
                 <div class="zoom-actions d-flex align-items-center">
@@ -76,12 +82,13 @@
                     variant="primary"
                     class="mr-2"
                     @click="openZoomDeep"
-                    style="border-radius: 10px; min-width: 140px"
+                    style="padding: 10px 16px; border-radius: 10px; min-width: 140px;"
                   >
-                    <i class="fas fa-video mr-2"></i> เข้าห้อง ZOOM
+                    <i class="fas fa-video mr-2"></i> ลิงค์เข้าห้อง ZOOM
                   </b-button>
 
                   <b-button
+                    v-if="false"
                     variant="outline-secondary"
                     class="mr-2"
                     @click="copyZoom"
@@ -91,11 +98,11 @@
                   </b-button>
 
                   <b-button
-                    variant="outline-info"
+                    variant="outline-primary"
                     @click="$bvModal.show('zoom-qr-modal')"
-                    style="border-radius: 10px"
+                    style="padding: 10px 16px; border-radius: 10px; min-width: 140px;"
                   >
-                    <i class="fas fa-qrcode mr-1"></i> แสดง QR
+                    <i class="fas fa-qrcode mr-1"></i> Scan QR เข้า ZOOM
                   </b-button>
                 </div>
 
@@ -121,6 +128,11 @@
                       >
                     </p>
                   </div>
+                  <div class="text-muted">
+                    คำแนะนำสำหรับ IOS: <br/>
+                    Meeting ID: 819 1588 6102 <br/>
+                    Passcode: 205390 <br/>
+                  </div>
                 </b-modal>
               </b-col>
             </b-row>
@@ -136,13 +148,13 @@
                   <button
                     style="
                       padding: 10px 16px;
-                      border-radius: 8px;
+                      border-radius: 10px;
                       background: #00c300;
                       color: white;
                       border: none;
                     "
                   >
-                    <i class="fab fa-line"></i> เพิ่มเพื่อน @everyoneth
+                    <i class="fab fa-line"></i> กรุณาเพิ่ม @everyoneth
                   </button>
                 </a>
               </b-col>
@@ -161,6 +173,7 @@
               <b-col class="">
                 <!-- Register button (responsive & max 400px) -->
                 <b-button
+                  v-if="!isCookied"
                   variant="primary"
                   class="custom-shadow w-100"
                   @click="register = true"
